@@ -204,19 +204,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // For demo, we're using clubs as sample "partners"
       const clubs = await storage.getClubs();
       
-      // Convert clubs to look like partners
-      const partners = clubs.map(club => ({
+      // Simulate partner attributes for the demo
+      const genders = ["Men", "Women"];
+      const drinkTypes = [
+        ["Beer", "Shots"], 
+        ["Wine", "Cocktails"], 
+        ["Beer", "Wine"], 
+        ["Cocktails", "Shots"]
+      ];
+      const musicOptions = [
+        ["Electronic", "Hip Hop"], 
+        ["Rock", "Pop"], 
+        ["Latin", "Pop"], 
+        ["Electronic", "Rock"]
+      ];
+      const areas = [2.1, 3.5, 0.8, 5.2, 8.7, 1.2, 4.3];
+      const availabilities = ["Tonight", "Weekends", "Weekdays"];
+      
+      // Convert clubs to look like partners with filtering attributes
+      const partners = clubs.map((club, index) => ({
         id: club.id,
         username: club.name.split(' ')[0], // Use first word of club name as username
         profileImage: club.images ? club.images[0] : null,
+        gender: genders[index % genders.length],
+        age: Math.floor(Math.random() * 15) + 21, // Random age between 21-35
         preferences: {
-          drinkType: ['Cocktails', 'Wine'],
-          musicTaste: club.musicTypes || ['Electronic', 'Hip Hop'],
+          drinkType: drinkTypes[index % drinkTypes.length],
+          musicTaste: club.musicTypes || musicOptions[index % musicOptions.length],
           favoriteVenues: [club.name]
         },
-        availability: 'Weekends',
+        distance: areas[index % areas.length],
+        availability: availabilities[index % availabilities.length],
         bio: club.description
       }));
+      
+      // Add a few more partners with different characteristics
+      partners.push({
+        id: clubs.length + 1,
+        username: "Alex",
+        profileImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+        gender: "Men",
+        age: 28,
+        preferences: {
+          drinkType: ["Beer", "Whiskey"],
+          musicTaste: ["Rock", "Jazz"],
+          favoriteVenues: ["Rock Bar", "Jazz Club"]
+        },
+        distance: 1.2,
+        availability: "Tonight",
+        bio: "Music lover and craft beer enthusiast."
+      });
+      
+      partners.push({
+        id: clubs.length + 2,
+        username: "Jessica",
+        profileImage: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80",
+        gender: "Women",
+        age: 25,
+        preferences: {
+          drinkType: ["Cocktails", "Wine"],
+          musicTaste: ["Pop", "Latin"],
+          favoriteVenues: ["Wine Bar", "Cocktail Lounge"]
+        },
+        distance: 0.5,
+        availability: "Tonight",
+        bio: "Passionate about mixology and dancing."
+      });
       
       res.json(partners);
     } catch (error) {

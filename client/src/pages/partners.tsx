@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -12,17 +12,42 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FaFilter, FaUsers, FaUserFriends, FaUserCheck } from 'react-icons/fa';
+import { toast } from '@/hooks/use-toast';
+
+// Partner interface to make the filtering easier
+interface Partner {
+  id: number;
+  username?: string;
+  profileImage?: string | null;
+  fullName?: string | null;
+  age?: number | null;
+  gender?: string | null;
+  preferences?: {
+    drinkType?: string[];
+    musicTaste?: string[];
+    favoriteVenues?: string[];
+  };
+  drinkPreferences?: string[] | null;
+  musicTaste?: string[] | null;
+  vibePref?: string | null;
+  distance?: number;
+  availability?: string;
+  bio?: string;
+  isActive?: boolean | null;
+}
 
 const Partners = () => {
-  const [lookingFor, setLookingFor] = useState("Anyone");
+  const [lookingFor, setLookingFor] = useState("Anybody");
   const [minAge, setMinAge] = useState("21");
   const [maxAge, setMaxAge] = useState("45");
+  const [area, setArea] = useState("All Areas");
   const [drinkPrefs, setDrinkPrefs] = useState<string[]>([]);
-  const [musicTaste, setMusicTaste] = useState("All genres");
-  const [vibePref, setVibePref] = useState("Energetic dance clubs");
+  const [musicTaste, setMusicTaste] = useState("All Music");
   const [activeTab, setActiveTab] = useState('available');
+  const [filteredUsers, setFilteredUsers] = useState<Partner[]>([]);
+  const [isFiltered, setIsFiltered] = useState(false);
   
-  const { data: users, isLoading, error } = useQuery<User[]>({
+  const { data: partners, isLoading, error } = useQuery<Partner[]>({
     queryKey: ['/api/partners'],
   });
   
@@ -36,21 +61,85 @@ const Partners = () => {
   
   const handleFindMatches = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, we would filter users based on preferences
-    console.log("Finding matches with preferences:", {
-      lookingFor,
-      ageRange: { min: minAge, max: maxAge },
-      drinkPrefs,
-      musicTaste,
-      vibePref
+    setIsFiltered(true);
+    
+    if (!partners) return;
+    
+    const filtered = partners.filter(partner => {
+      // Gender filter
+      if (lookingFor !== "Anybody" && partner.gender && partner.gender !== lookingFor) {
+        return false;
+      }
+      
+      // Age filter
+      const age = partner.age || Math.floor(Math.random() * 15) + 21; // For demo purposes
+      if (parseInt(minAge) > age || parseInt(maxAge) < age) {
+        return false;
+      }
+      
+      // Area filter
+      if (area !== "All Areas") {
+        const partnerArea = partner.distance && partner.distance < 5 ? "Nearby" : "Far";
+        if (area === "Nearby" && partnerArea !== "Nearby") {
+          return false;
+        }
+      }
+      
+      // Drink preferences filter
+      if (drinkPrefs.length > 0) {
+        const partnerDrinks = partner.preferences?.drinkType || partner.drinkPreferences || [];
+        if (!drinkPrefs.some(pref => partnerDrinks.includes(pref))) {
+          return false;
+        }
+      }
+      
+      // Music taste filter
+      if (musicTaste !== "All Music") {
+        const partnerMusic = partner.preferences?.musicTaste || partner.musicTaste || [];
+        if (!partnerMusic.includes(musicTaste)) {
+          return false;
+        }
+      }
+      
+      return true;
+    });
+    
+    setFilteredUsers(filtered);
+    
+    toast({
+      title: "Filters Applied",
+      description: `Found ${filtered.length} potential drinking buddies matching your criteria`,
     });
   };
 
-  // Filter users based on active tab and preferences
-  const filteredUsers = users?.filter(user => {
-    // In a real app, we would have more sophisticated filtering
-    return true;
-  });
+  // Apply tab filters
+  useEffect(() => {
+    if (!partners) return;
+    
+    if (!isFiltered) {
+      let tabFiltered = [...partners];
+      
+      if (activeTab === 'available') {
+        // Show partners available tonight
+        tabFiltered = partners.filter(p => 
+          p.availability === 'Tonight' || p.availability === 'Weekends'
+        );
+      } else if (activeTab === 'nearby') {
+        // Show partners who are nearby (less than 5 miles)
+        tabFiltered = partners.filter(p => p.distance && p.distance < 5);
+      } else if (activeTab === 'matches') {
+        // Show best matches based on similar preferences (simplified for demo)
+        tabFiltered = partners;
+      }
+      
+      setFilteredUsers(tabFiltered);
+    }
+  }, [partners, activeTab, isFiltered]);
+
+  // Reset filters when tab changes
+  useEffect(() => {
+    setIsFiltered(false);
+  }, [activeTab]);
 
   return (
     <>
@@ -93,13 +182,12 @@ const Partners = () => {
                   <Label className="block text-muted mb-2">I'm looking for</Label>
                   <Select value={lookingFor} onValueChange={setLookingFor}>
                     <SelectTrigger className="w-full bg-[#121212] border border-primary text-white">
-                      <SelectValue placeholder="Anyone" />
+                      <SelectValue placeholder="Anybody" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Anyone">Anyone</SelectItem>
+                      <SelectItem value="Anybody">Anybody</SelectItem>
                       <SelectItem value="Men">Men</SelectItem>
                       <SelectItem value="Women">Women</SelectItem>
-                      <SelectItem value="Non-binary">Non-binary</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -110,7 +198,7 @@ const Partners = () => {
                     <Input 
                       type="number" 
                       placeholder="Min" 
-                      min="18"
+                      min="21"
                       max="100"
                       value={minAge}
                       onChange={(e) => setMinAge(e.target.value)}
@@ -120,7 +208,7 @@ const Partners = () => {
                     <Input 
                       type="number" 
                       placeholder="Max"
-                      min="18"
+                      min="21"
                       max="100"
                       value={maxAge}
                       onChange={(e) => setMaxAge(e.target.value)}
@@ -130,7 +218,20 @@ const Partners = () => {
                 </div>
                 
                 <div>
-                  <Label className="block text-muted mb-2">Drink Preferences</Label>
+                  <Label className="block text-muted mb-2">Area</Label>
+                  <Select value={area} onValueChange={setArea}>
+                    <SelectTrigger className="w-full bg-[#121212] border border-primary text-white">
+                      <SelectValue placeholder="All Areas" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="All Areas">All Areas</SelectItem>
+                      <SelectItem value="Nearby">Nearby</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <Label className="block text-muted mb-2">Drink Preference</Label>
                   <div className="grid grid-cols-2 gap-2">
                     {["Beer", "Wine", "Cocktails", "Shots"].map(pref => (
                       <label 
@@ -152,31 +253,15 @@ const Partners = () => {
                   <Label className="block text-muted mb-2">Music Taste</Label>
                   <Select value={musicTaste} onValueChange={setMusicTaste}>
                     <SelectTrigger className="w-full bg-[#121212] border border-primary text-white">
-                      <SelectValue placeholder="All genres" />
+                      <SelectValue placeholder="All Music" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="All genres">All genres</SelectItem>
-                      <SelectItem value="Electronic/EDM">Electronic/EDM</SelectItem>
-                      <SelectItem value="Hip Hop/R&B">Hip Hop/R&B</SelectItem>
-                      <SelectItem value="Rock/Alternative">Rock/Alternative</SelectItem>
-                      <SelectItem value="Latin/Reggaeton">Latin/Reggaeton</SelectItem>
-                      <SelectItem value="Pop/Top 40">Pop/Top 40</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div>
-                  <Label className="block text-muted mb-2">Vibe Preference</Label>
-                  <Select value={vibePref} onValueChange={setVibePref}>
-                    <SelectTrigger className="w-full bg-[#121212] border border-primary text-white">
-                      <SelectValue placeholder="Energetic dance clubs" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Energetic dance clubs">Energetic dance clubs</SelectItem>
-                      <SelectItem value="Relaxed lounges">Relaxed lounges</SelectItem>
-                      <SelectItem value="Dive bars">Dive bars</SelectItem>
-                      <SelectItem value="Upscale venues">Upscale venues</SelectItem>
-                      <SelectItem value="Live music spots">Live music spots</SelectItem>
+                      <SelectItem value="All Music">All Music</SelectItem>
+                      <SelectItem value="Electronic">Electronic/EDM</SelectItem>
+                      <SelectItem value="Hip Hop">Hip Hop/R&B</SelectItem>
+                      <SelectItem value="Rock">Rock/Alternative</SelectItem>
+                      <SelectItem value="Latin">Latin/Reggaeton</SelectItem>
+                      <SelectItem value="Pop">Pop/Top 40</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -223,8 +308,8 @@ const Partners = () => {
                   initial="hidden"
                   animate="visible"
                 >
-                  {filteredUsers?.map((user, index) => (
-                    <PartnerCard key={user.id} partner={user} index={index} />
+                  {filteredUsers?.map((partner, index) => (
+                    <PartnerCard key={partner.id} partner={partner} index={index} />
                   ))}
                 </motion.div>
               )}
