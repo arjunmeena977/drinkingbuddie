@@ -11,6 +11,7 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        // Application color system
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
@@ -44,6 +45,15 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
+        
+        // Color Palette (direct HEX values)
+        "royal-purple": "#6A0DAD",
+        "deep-blue": "#1E3A8A",
+        "gold": "#FFD700",
+        "rich-burgundy": "#800020",
+        "platinum-silver": "#E5E4E2",
+        "midnight-black": "#121212",
+        "ivory-white": "#FFFFF0",
         chart: {
           "1": "hsl(var(--chart-1))",
           "2": "hsl(var(--chart-2))",

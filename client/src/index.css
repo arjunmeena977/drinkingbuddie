@@ -4,33 +4,45 @@
 
 @layer base {
   :root {
-    --background: 240 17% 7%;
-    --foreground: 60 100% 97%;
+    /* Primary Colors */
+    --royal-purple: 270 87% 37%; /* #6A0DAD */
+    --deep-blue: 222 71% 35%; /* #1E3A8A */
+    --gold: 48 100% 50%; /* #FFD700 */
+    
+    /* Secondary & Accent Colors */
+    --rich-burgundy: 345 100% 25%; /* #800020 */
+    --platinum-silver: 40 8% 89%; /* #E5E4E2 */
+    --midnight-black: 0 0% 7%; /* #121212 */
+    --ivory-white: 60 100% 97%; /* #FFFFF0 */
+    
+    /* System Colors */
+    --background: var(--midnight-black);
+    --foreground: var(--ivory-white);
     
     --card: 240 24% 10%;
-    --card-foreground: 60 100% 97%;
+    --card-foreground: var(--ivory-white);
     
     --popover: 240 17% 12%;
-    --popover-foreground: 60 100% 97%;
+    --popover-foreground: var(--ivory-white);
     
-    --primary: 270 87% 37%;
-    --primary-foreground: 60 100% 97%;
+    --primary: var(--royal-purple);
+    --primary-foreground: var(--ivory-white);
     
-    --secondary: 222 71% 35%;
-    --secondary-foreground: 60 100% 97%;
+    --secondary: var(--deep-blue);
+    --secondary-foreground: var(--ivory-white);
     
-    --muted: 240 5% 65%;
-    --muted-foreground: 60 100% 90%;
+    --muted: var(--platinum-silver);
+    --muted-foreground: 240 5% 40%;
     
-    --accent: 48 100% 42%;
-    --accent-foreground: 0 0% 7%;
+    --accent: var(--gold);
+    --accent-foreground: var(--midnight-black);
     
-    --destructive: 3 100% 25%;
-    --destructive-foreground: 60 100% 97%;
+    --destructive: var(--rich-burgundy);
+    --destructive-foreground: var(--ivory-white);
     
     --border: 240 17% 18%;
     --input: 240 17% 18%;
-    --ring: 270 87% 37%;
+    --ring: var(--royal-purple);
     
     --radius: 0.5rem;
   }
@@ -45,7 +57,7 @@
 }
 
 .hero-gradient {
-  background: linear-gradient(to right, rgba(106, 13, 173, 0.8), rgba(30, 58, 138, 0.8));
+  background: linear-gradient(to right, rgba(106, 13, 173, 0.9), rgba(30, 58, 138, 0.9));
 }
 
 .card-hover {
@@ -53,15 +65,27 @@
 }
 
 .btn-primary {
-  @apply bg-primary hover:bg-primary/90 text-white font-semibold rounded-full transition-all transform hover:scale-105;
+  @apply bg-royal-purple hover:bg-royal-purple/90 text-white font-semibold rounded-full transition-all transform hover:scale-105;
 }
 
 .btn-secondary {
-  @apply bg-transparent border-2 border-accent text-accent hover:bg-accent hover:text-secondary font-semibold rounded-full transition-all transform hover:scale-105;
+  @apply bg-deep-blue hover:bg-deep-blue/90 text-white font-semibold rounded-full transition-all transform hover:scale-105;
 }
 
-.btn-outline {
-  @apply bg-transparent border border-accent text-accent hover:bg-accent hover:text-secondary font-semibold rounded-lg transition-colors;
+.btn-accent {
+  @apply bg-gold hover:bg-gold/90 text-midnight-black font-semibold rounded-full transition-all transform hover:scale-105;
+}
+
+.btn-burgundy {
+  @apply bg-rich-burgundy hover:bg-rich-burgundy/90 text-white font-semibold rounded-full transition-all transform hover:scale-105;
+}
+
+.btn-outline-primary {
+  @apply bg-transparent border-2 border-royal-purple text-royal-purple hover:bg-royal-purple hover:text-white font-semibold rounded-full transition-colors;
+}
+
+.btn-outline-accent {
+  @apply bg-transparent border-2 border-gold text-gold hover:bg-gold hover:text-midnight-black font-semibold rounded-full transition-colors;
 }
 
 .review-stars {

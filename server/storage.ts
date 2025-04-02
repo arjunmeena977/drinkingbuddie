@@ -82,7 +82,22 @@ export class MemStorage implements IStorage {
   
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userId++;
-    const user: User = { ...insertUser, id, isActive: true };
+    
+    // Create a fresh object to ensure all required fields are present
+    const user: User = { 
+      username: insertUser.username,
+      password: insertUser.password,
+      email: insertUser.email,
+      id,
+      isActive: true,
+      fullName: insertUser.fullName || null,
+      age: insertUser.age || null,
+      gender: insertUser.gender || null,
+      profileImage: insertUser.profileImage || null,
+      drinkPreferences: insertUser.drinkPreferences || null,
+      musicTaste: insertUser.musicTaste || null,
+      vibePref: insertUser.vibePref || null
+    };
     this.users.set(id, user);
     return user;
   }
@@ -107,7 +122,20 @@ export class MemStorage implements IStorage {
   
   async createClub(insertClub: InsertClub): Promise<Club> {
     const id = this.clubId++;
-    const club: Club = { ...insertClub, id };
+    const club: Club = { 
+      ...insertClub, 
+      id,
+      distance: insertClub.distance || null,
+      priceRange: insertClub.priceRange || null,
+      rating: insertClub.rating || null,
+      reviewCount: insertClub.reviewCount || null,
+      images: insertClub.images || null,
+      category: insertClub.category || null,
+      features: insertClub.features || null,
+      openHours: insertClub.openHours || null,
+      musicTypes: insertClub.musicTypes || null,
+      isFeatured: insertClub.isFeatured || null
+    };
     this.clubs.set(id, club);
     return club;
   }
@@ -155,7 +183,15 @@ export class MemStorage implements IStorage {
       ...insertEvent, 
       id,
       attendeesCount: 0,
-      interestedCount: 0
+      interestedCount: 0,
+      image: insertEvent.image || null,
+      category: insertEvent.category || null,
+      venueId: insertEvent.venueId || null,
+      price: insertEvent.price || null,
+      ticketInfo: insertEvent.ticketInfo || null,
+      featured: insertEvent.featured || null,
+      artists: insertEvent.artists || null,
+      dressCode: insertEvent.dressCode || null
     };
     this.events.set(id, event);
     return event;
@@ -206,7 +242,8 @@ export class MemStorage implements IStorage {
     const review: Review = { 
       ...insertReview, 
       id,
-      date: new Date()
+      date: new Date(),
+      comment: insertReview.comment || null
     };
     this.reviews.set(id, review);
     

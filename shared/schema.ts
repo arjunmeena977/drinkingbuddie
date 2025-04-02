@@ -25,6 +25,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   fullName: true,
   age: true,
   gender: true,
+  profileImage: true,
   drinkPreferences: true,
   musicTaste: true,
   vibePref: true,
