@@ -307,7 +307,7 @@ export class MemStorage implements IStorage {
         time: "10 PM - 5 AM",
         location: "Skyline Rooftop, 789 Highrise Blvd",
         venueId: 2,
-        image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6a3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80",
+        image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1950&q=80",
         price: 30,
         ticketInfo: "General Admission",
         category: "Hot Event",

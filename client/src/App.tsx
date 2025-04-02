@@ -14,6 +14,8 @@ import SignIn from "@/pages/signin";
 import SignUp from "@/pages/signup";
 import ClubDetails from "@/pages/club-details";
 import EventDetails from "@/pages/event-details";
+import Profile from "@/pages/profile";
+import Favorites from "@/pages/favorites";
 import NotFound from "@/pages/not-found";
 
 // Layout
@@ -38,6 +40,8 @@ function App() {
           <Route path="/terms" component={Terms} />
           <Route path="/signin" component={SignIn} />
           <Route path="/signup" component={SignUp} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/favorites" component={Favorites} />
           <Route component={NotFound} />
         </Switch>
       </main>
