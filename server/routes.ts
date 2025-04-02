@@ -200,13 +200,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get users for partner matching (limited fields for privacy)
   app.get("/api/partners", async (req: Request, res: Response) => {
     try {
-      const allUsers = Array.from((await storage.getClubs()).values());
+      // In a real app, this would get actual users
+      // For demo, we're using clubs as sample "partners"
+      const clubs = await storage.getClubs();
       
-      // Filter out sensitive information
-      const partners = allUsers.map(user => {
-        const { password, email, ...safeUser } = user;
-        return safeUser;
-      });
+      // Convert clubs to look like partners
+      const partners = clubs.map(club => ({
+        id: club.id,
+        username: club.name.split(' ')[0], // Use first word of club name as username
+        profileImage: club.images ? club.images[0] : null,
+        preferences: {
+          drinkType: ['Cocktails', 'Wine'],
+          musicTaste: club.musicTypes || ['Electronic', 'Hip Hop'],
+          favoriteVenues: [club.name]
+        },
+        availability: 'Weekends',
+        bio: club.description
+      }));
       
       res.json(partners);
     } catch (error) {

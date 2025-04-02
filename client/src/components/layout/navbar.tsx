@@ -1,15 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { FaGlassCheers } from "react-icons/fa";
+import { FaGlassCheers, FaUserCircle } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [location] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<{ username: string } | null>(null);
   
+  // Check if user is logged in (in a real app, this would check the session/token)
+  useEffect(() => {
+    // For demo purposes, we'll check if there's user data in localStorage
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setIsLoggedIn(true);
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+  
+  const handleLogout = () => {
+    // Clear user data and set logged out state
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    setUser(null);
+    // Redirect to home
+    window.location.href = '/';
   };
   
   const isActive = (path: string) => {
@@ -18,7 +46,7 @@ const Navbar = () => {
   
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Clubs", path: "/clubs" },
+    { name: "Best Clubs", path: "/clubs" },
     { name: "Find Partners", path: "/partners" },
     { name: "Events", path: "/events" },
     { name: "About Us", path: "/about" },
@@ -63,11 +91,35 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link href="/signin">
-              <Button className="bg-accent text-[#121212] hover:bg-accent/90 px-6 py-2 rounded-full font-semibold">
-                Sign In
-              </Button>
-            </Link>
+            
+            {isLoggedIn && user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger className="focus:outline-none flex items-center">
+                  <div className="flex items-center space-x-2 text-white">
+                    <FaUserCircle className="text-xl text-accent" />
+                    <span className="font-medium">{user.username}</span>
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-48">
+                  <DropdownMenuItem>
+                    <Link href="/profile" className="w-full">My Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/favorites" className="w-full">My Favorites</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout}>
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link href="/signin">
+                <Button className="bg-accent text-[#121212] hover:bg-accent/90 px-6 py-2 rounded-full font-semibold">
+                  Sign In
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
         
@@ -75,6 +127,17 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="lg:hidden mt-4 pb-2 border-t border-gray-700">
             <div className="flex flex-col space-y-3 mt-3">
+              {/* User Profile Section for Mobile */}
+              {isLoggedIn && user && (
+                <div className="flex items-center py-2 border-b border-gray-700 mb-2">
+                  <FaUserCircle className="text-2xl text-accent mr-2" />
+                  <div>
+                    <p className="font-semibold text-white">{user.username}</p>
+                    <p className="text-xs text-muted">Signed in</p>
+                  </div>
+                </div>
+              )}
+              
               {navLinks.map((link) => (
                 <Link 
                   key={link.path} 
@@ -89,11 +152,32 @@ const Navbar = () => {
                   {link.name}
                 </Link>
               ))}
-              <Link href="/signin" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full bg-accent text-[#121212] hover:bg-accent/90 px-6 py-2 rounded-full font-semibold">
-                  Sign In
-                </Button>
-              </Link>
+              
+              {isLoggedIn && user ? (
+                <>
+                  <Link href="/profile" className="text-white hover:text-accent transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
+                    My Profile
+                  </Link>
+                  <Link href="/favorites" className="text-white hover:text-accent transition-colors py-2" onClick={() => setIsMenuOpen(false)}>
+                    My Favorites
+                  </Link>
+                  <button 
+                    onClick={() => {
+                      handleLogout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="text-left text-destructive py-2 font-medium"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link href="/signin" onClick={() => setIsMenuOpen(false)}>
+                  <Button className="w-full bg-accent text-[#121212] hover:bg-accent/90 px-6 py-2 rounded-full font-semibold">
+                    Sign In
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         )}

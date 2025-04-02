@@ -62,6 +62,12 @@ const SignIn = () => {
         throw new Error(error.message || 'Failed to sign in');
       }
       
+      // Get user data from the response
+      const userData = await response.json();
+      
+      // Store user data in localStorage
+      localStorage.setItem('user', JSON.stringify(userData));
+      
       // Success
       toast({
         title: "Welcome back!",
