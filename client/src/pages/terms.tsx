@@ -6,7 +6,7 @@ const Terms = () => {
   return (
     <>
       <Helmet>
-        <title>Terms & Conditions - Drinking Buddy</title>
+        <title>Terms & Conditions - Drinking buddie</title>
         <meta name="description" content="Read and understand the Terms & Conditions for using Drinking Buddy. Learn about your rights and responsibilities as a user." />
       </Helmet>
       
@@ -163,7 +163,7 @@ const Terms = () => {
               If you have any questions about these Terms, please contact us at:
             </p>
             <p>
-              Email: legal@drinkingbuddy.com<br />
+              Email: legal@drinkingbuddie.com<br />
               Address: 123 Nightlife Avenue, New York, NY 10001
             </p>
           </motion.div>

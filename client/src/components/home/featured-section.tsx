@@ -10,18 +10,18 @@ const FeaturedSection = () => {
   const { data: featuredClub, isLoading: clubLoading } = useQuery<Club[]>({
     queryKey: ['/api/clubs/featured/1'],
   });
-  
+
   const { data: featuredEvent, isLoading: eventLoading } = useQuery<Event[]>({
     queryKey: ['/api/events/featured/1'],
   });
-  
+
   const club = featuredClub?.[0];
   const event = featuredEvent?.[0];
 
   return (
     <section id="featured" className="py-16 bg-gradient-to-b from-[#121212] to-secondary">
       <div className="container mx-auto px-4">
-        <motion.div 
+        <motion.div
           className="text-center mb-12"
           variants={fadeIn}
           initial="hidden"
@@ -33,8 +33,8 @@ const FeaturedSection = () => {
             The hottest spots and events happening right now, curated just for you
           </p>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-3 gap-8"
           variants={staggerContainer}
           initial="hidden"
@@ -42,14 +42,14 @@ const FeaturedSection = () => {
           viewport={{ once: true }}
         >
           {/* Featured Club */}
-          <motion.div 
+          <motion.div
             className="bg-[#121212] rounded-xl shadow-lg overflow-hidden card-hover"
             variants={fadeIn}
           >
             <div className="relative h-64">
-              <img 
+              <img
                 src={club?.images?.[0] || "https://images.unsplash.com/photo-1581974944026-5d6ed762f617?auto=format&fit=crop&w=800&q=80"}
-                alt={club?.name || "Featured Club"} 
+                alt={club?.name || "Featured Club"}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#121212] to-transparent"></div>
@@ -62,7 +62,7 @@ const FeaturedSection = () => {
             <div className="p-6">
               <h3 className="font-bold text-2xl text-white mb-2">{club?.name || "Featured Club"}</h3>
               <div className="flex items-center mb-4">
-                <div className="review-stars">
+                <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, i) => (
                     <FaStar key={i} className={`${i < Math.floor(club?.rating || 4.5) ? "opacity-100" : "opacity-30"} ${i === Math.floor(club?.rating || 4.5) && (club?.rating || 4.5) % 1 > 0 ? "opacity-50" : ""}`} />
                   ))}
@@ -71,22 +71,22 @@ const FeaturedSection = () => {
               </div>
               <p className="text-muted mb-4">{club?.description || "The hottest dance floors with world-class DJs every weekend."}</p>
               <Link href={`/clubs/${club?.id || 1}`}>
-                <Button variant="outline" className="w-full">
+                <Button className="w-full">
                   View Details
                 </Button>
               </Link>
             </div>
           </motion.div>
-          
+
           {/* Featured Event */}
-          <motion.div 
+          <motion.div
             className="bg-[#121212] rounded-xl shadow-lg overflow-hidden card-hover"
             variants={fadeIn}
           >
             <div className="relative h-64">
-              <img 
+              <img
                 src={event?.image || "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6a3?auto=format&fit=crop&w=800&q=80"}
-                alt={event?.name || "Featured Event"} 
+                alt={event?.name || "Featured Event"}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#121212] to-transparent"></div>
@@ -104,22 +104,22 @@ const FeaturedSection = () => {
               </div>
               <p className="text-muted mb-4">{event?.description || "The season's biggest rooftop party with open bar for the first hour."}</p>
               <Link href={`/events/${event?.id || 1}`}>
-                <Button variant="outline" className="w-full">
+                <Button className="w-full">
                   View Details
                 </Button>
               </Link>
             </div>
           </motion.div>
-          
+
           {/* Drinking Buddy Match */}
-          <motion.div 
+          <motion.div
             className="bg-[#121212] rounded-xl shadow-lg overflow-hidden card-hover"
             variants={fadeIn}
           >
             <div className="relative h-64">
-              <img 
+              <img
                 src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=800&q=80"
-                alt="Find your drinking partner" 
+                alt="Find your drinking partner"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#121212] to-transparent"></div>

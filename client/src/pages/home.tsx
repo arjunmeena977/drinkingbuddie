@@ -11,7 +11,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>Drinking Buddy - Your Ultimate Nightlife Companion</title>
+        <title>drinkingbuddie - Your Ultimate Nightlife Companion</title>
         <meta name="description" content="Discover the best clubs, connect with drinking partners, and never miss another epic night out." />
       </Helmet>
       

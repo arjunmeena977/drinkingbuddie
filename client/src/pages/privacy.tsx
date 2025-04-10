@@ -136,7 +136,7 @@ const Privacy = () => {
               If you have questions or concerns about this Privacy Policy, please contact us at:
             </p>
             <p>
-              Email: privacy@drinkingbuddy.com<br />
+              Email: privacy@drinkingbuddie.com<br />
               Address: 123 Nightlife Avenue, New York, NY 10001
             </p>
           </motion.div>

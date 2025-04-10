@@ -7,7 +7,7 @@ const About = () => {
   return (
     <>
       <Helmet>
-        <title>About Us - Drinking Buddy</title>
+        <title>About Us - drinkingbuddie</title>
         <meta name="description" content="Learn more about Drinking Buddy, your ultimate nightlife companion. Discover our mission, vision, and the team behind the platform." />
       </Helmet>
       
@@ -19,7 +19,7 @@ const About = () => {
             animate="visible"
             variants={fadeIn}
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">About Drinking Buddy</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">About drinkingbuddie</h1>
             <p className="text-lg text-muted-foreground">
               Your Ultimate Nightlife Companion: Connecting People, Places, and Parties
             </p>

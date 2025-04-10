@@ -127,7 +127,7 @@ const Profile = () => {
   return (
     <>
       <Helmet>
-        <title>My Profile - Drinking Buddy</title>
+        <title>My Profile - Drinking buddie</title>
         <meta name="description" content="Manage your Drinking Buddy profile and preferences" />
       </Helmet>
 

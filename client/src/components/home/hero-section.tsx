@@ -44,7 +44,7 @@ const HeroSection = () => {
             </Link>
             <Link href="/partners">
               <a className="btn-secondary px-8 py-3 text-lg inline-block text-center">
-                Find a Drinking Buddy
+                Find a Drinking buddie
               </a>
             </Link>
           </motion.div>

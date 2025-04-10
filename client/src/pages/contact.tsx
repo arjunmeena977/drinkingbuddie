@@ -170,9 +170,9 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-2">Email Us</h3>
-                    <p className="text-muted mb-1">General Inquiries: info@drinkingbuddy.com</p>
-                    <p className="text-muted mb-1">Support: support@drinkingbuddy.com</p>
-                    <p className="text-muted">Partnerships: partners@drinkingbuddy.com</p>
+                    <p className="text-muted mb-1">General Inquiries: info@drinkingbuddie.com</p>
+                    <p className="text-muted mb-1">Support: support@drinkingbuddie.com</p>
+                    <p className="text-muted">Partnerships: partners@drinkingbuddie.com</p>
                   </div>
                 </div>
                 
