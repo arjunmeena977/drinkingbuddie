@@ -145,7 +145,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userData = insertUserSchema.parse(req.body);
       
       // Check if username already exists
-      const existingUserByUsername = await storage.getUserByUsername(userData.username);
+      const existingUserByUsername = await storage.getUserByUsername(userData.name);
       if (existingUserByUsername) {
         return res.status(409).json({ message: "Username already taken" });
       }

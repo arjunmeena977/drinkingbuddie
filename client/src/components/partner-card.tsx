@@ -9,7 +9,7 @@ import { toast } from "@/hooks/use-toast";
 // Partner type to match our expected partner data
 interface Partner {
   id: number;
-  username?: string;
+  name?: string;
   profileImage?: string | null;
   fullName?: string | null;
   age?: number | null;
@@ -60,8 +60,8 @@ const PartnerCard = ({ partner, index = 0 }: PartnerCardProps) => {
   const getDisplayName = () => {
     if (partner.fullName) {
       return partner.fullName.split(' ')[0];
-    } else if (partner.username) {
-      return partner.username;
+    } else if (partner.name) {
+      return partner.name;
     }
     return "Buddy";
   };

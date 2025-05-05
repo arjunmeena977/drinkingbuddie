@@ -15,7 +15,7 @@ const Navbar = () => {
   const [location] = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<{ username: string } | null>(null);
+  const [user, setUser] = useState<{ name: string } | null>(null);
   
   // Check if user is logged in (in a real app, this would check the session/token)
   useEffect(() => {
@@ -97,7 +97,7 @@ const Navbar = () => {
                 <DropdownMenuTrigger className="focus:outline-none flex items-center">
                   <div className="flex items-center space-x-2 text-white">
                     <FaUserCircle className="text-xl text-accent" />
-                    <span className="font-medium">{user.username}</span>
+                    <span className="font-medium">{user.name}</span>
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48">
@@ -132,7 +132,7 @@ const Navbar = () => {
                 <div className="flex items-center py-2 border-b border-gray-700 mb-2">
                   <FaUserCircle className="text-2xl text-accent mr-2" />
                   <div>
-                    <p className="font-semibold text-white">{user.username}</p>
+                    <p className="font-semibold text-white">{user.name}</p>
                     <p className="text-xs text-muted">Signed in</p>
                   </div>
                 </div>

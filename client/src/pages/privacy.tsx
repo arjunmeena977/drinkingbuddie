@@ -49,7 +49,7 @@ const Privacy = () => {
             </p>
             <ul>
               <li>Name, email address, and contact details</li>
-              <li>Username and password</li>
+              <li>name and password</li>
               <li>Age and gender</li>
               <li>Profile pictures</li>
               <li>Personal preferences related to nightlife, music, and drinks</li>

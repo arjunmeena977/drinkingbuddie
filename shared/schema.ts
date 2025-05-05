@@ -5,7 +5,7 @@ import { z } from "zod";
 // User model
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
+  name: text("name").notNull().unique(),
   password: text("password").notNull(),
   email: text("email").notNull().unique(),
   fullName: text("full_name"),
@@ -19,7 +19,7 @@ export const users = pgTable("users", {
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
+  name: true,
   password: true,
   email: true,
   fullName: true,

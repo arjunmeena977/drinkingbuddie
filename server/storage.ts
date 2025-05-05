@@ -68,9 +68,9 @@ export class MemStorage implements IStorage {
     return this.users.get(id);
   }
   
-  async getUserByUsername(username: string): Promise<User | undefined> {
+  async getUserByUsername(name: string): Promise<User | undefined> {
     return Array.from(this.users.values()).find(
-      (user) => user.username.toLowerCase() === username.toLowerCase()
+      (user) => user.name.toLowerCase() === name.toLowerCase()
     );
   }
   
@@ -85,7 +85,7 @@ export class MemStorage implements IStorage {
     
     // Create a fresh object to ensure all required fields are present
     const user: User = { 
-      username: insertUser.username,
+      name: insertUser.name,
       password: insertUser.password,
       email: insertUser.email,
       id,
@@ -461,9 +461,9 @@ export class MemStorage implements IStorage {
     ];
     
     // Add users
-    for (const user of users) {
-      await this.createUser(user as InsertUser);
-    }
+    // for (const user of users) {
+    //   await this.createUser(user as InsertUser);
+    // }
     
     // Sample reviews
     const reviews = [

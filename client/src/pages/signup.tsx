@@ -13,29 +13,32 @@ import { toast } from '@/hooks/use-toast';
 const SignUp = () => {
   const [, setLocation] = useLocation();
   const [userData, setUserData] = useState({
-    username: '',
+    name: '',
     email: '',
+    mobile: '',
     password: '',
     confirmPassword: '',
+    otp: '',
     agreedToTerms: false,
     agreedToAge: false
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData(prev => ({ ...prev, [name]: value }));
   };
-  
+
   const handleCheckboxChange = (name: string, checked: boolean) => {
     setUserData(prev => ({ ...prev, [name]: checked }));
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate form
-    if (!userData.username || !userData.email || !userData.password || !userData.confirmPassword) {
+    if (!userData.name || !userData.email || !userData.password || !userData.confirmPassword) {
       toast({
         title: "Error",
         description: "Please fill all required fields",
@@ -43,7 +46,7 @@ const SignUp = () => {
       });
       return;
     }
-    
+
     if (userData.password !== userData.confirmPassword) {
       toast({
         title: "Error",
@@ -52,7 +55,7 @@ const SignUp = () => {
       });
       return;
     }
-    
+
     if (!userData.agreedToTerms || !userData.agreedToAge) {
       toast({
         title: "Error",
@@ -61,9 +64,9 @@ const SignUp = () => {
       });
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
       // Submit registration request
       const response = await fetch('/api/auth/register', {
@@ -72,26 +75,27 @@ const SignUp = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          username: userData.username,
+          name: userData.name,
           email: userData.email,
+          mobile: userData.mobile,
           password: userData.password
         })
       });
-      
+
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || 'Registration failed');
       }
-      
+
       // Success
       toast({
         title: "Account created successfully!",
         description: "You can now sign in with your credentials"
       });
-      
+
       // Redirect to sign in page
       setLocation('/signin');
-      
+
     } catch (error) {
       toast({
         title: "Registration failed",
@@ -109,14 +113,14 @@ const SignUp = () => {
         <title>Sign Up - Drinking Buddy</title>
         <meta name="description" content="Create your Drinking Buddy account to discover the best nightlife spots, connect with drinking partners, and receive personalized event recommendations." />
       </Helmet>
-      
+
       <div className="min-h-screen bg-background flex flex-col md:flex-row">
         {/* Left side - Image */}
         <div className="hidden md:block md:w-1/2 bg-gradient-to-b from-primary to-secondary relative">
           <div className="absolute inset-0 opacity-30">
-            <img 
+            <img
               src="https://images.unsplash.com/photo-1581974944026-5d6ed762f617?auto=format&fit=crop&w=1950&q=80"
-              alt="Nightlife scene" 
+              alt="Nightlife scene"
               className="w-full h-full object-cover"
             />
           </div>
@@ -127,9 +131,9 @@ const SignUp = () => {
             </p>
           </div>
         </div>
-        
+
         {/* Right side - Form */}
-        <motion.div 
+        <motion.div
           className="md:w-1/2 flex flex-col justify-center items-center p-8 md:p-16"
           initial="hidden"
           animate="visible"
@@ -144,32 +148,32 @@ const SignUp = () => {
               <h1 className="text-3xl font-bold text-white mb-2">Create Your Account</h1>
               <p className="text-muted">Join the community of nightlife enthusiasts</p>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="name">name</Label>
                 <div className="relative mt-1">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <FaUser className="text-muted-foreground" />
                   </div>
-                  <Input 
-                    id="username"
-                    name="username"
-                    value={userData.username}
+                  <Input
+                    id="name"
+                    name="name"
+                    value={userData.name}
                     onChange={handleChange}
-                    placeholder="Choose a username"
+                    placeholder="Choose a name"
                     className="pl-10 bg-secondary bg-opacity-30 border-primary"
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="email">Email</Label>
                 <div className="relative mt-1">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <FaEnvelope className="text-muted-foreground" />
                   </div>
-                  <Input 
+                  <Input
                     id="email"
                     name="email"
                     type="email"
@@ -180,14 +184,31 @@ const SignUp = () => {
                   />
                 </div>
               </div>
-              
+
+              <div>
+                <Label htmlFor="mobile">Mobile</Label>
+                <div className="relative mt-1">
+                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <FaUser className="text-muted-foreground" />
+                  </div>
+                  <Input
+                    id="mobile"
+                    name="mobile"
+                    value={userData.mobile}
+                    onChange={handleChange}
+                    placeholder="Enter your mobile number"
+                    className="pl-10 bg-secondary bg-opacity-30 border-primary"
+                  />
+                </div>
+              </div>
+
               <div>
                 <Label htmlFor="password">Password</Label>
                 <div className="relative mt-1">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <FaLock className="text-muted-foreground" />
                   </div>
-                  <Input 
+                  <Input
                     id="password"
                     name="password"
                     type="password"
@@ -199,14 +220,14 @@ const SignUp = () => {
                 </div>
                 <p className="text-xs text-muted mt-1">Minimum 8 characters with at least one number</p>
               </div>
-              
+
               <div>
                 <Label htmlFor="confirmPassword">Confirm Password</Label>
                 <div className="relative mt-1">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <FaLock className="text-muted-foreground" />
                   </div>
-                  <Input 
+                  <Input
                     id="confirmPassword"
                     name="confirmPassword"
                     type="password"
@@ -217,13 +238,28 @@ const SignUp = () => {
                   />
                 </div>
               </div>
-              
+              <div className="mt-6 space-y-2">
+                <Button onClick={() => window.location.href = "/api/auth/google/login"} className="w-full bg-white text-black flex items-center justify-center gap-2">
+                  <img src="/google-icon.png" 
+                  alt="Google" className="h-5 w-5" />
+                  <a href="http://localhost:8000/auth/google">Sign in with Google</a>
+                  
+
+                </Button>
+ 
+                <Button onClick={() => window.location.href = "/api/auth/instagram/login"} className="w-full bg-gradient-to-r from-pink-500 to-yellow-400 text-white flex items-center justify-center gap-2">
+                  <img src="/instagram-icon.png" alt="Instagram" className="h-5 w-5" />
+                  <a href="http://localhost:8000/auth/instagram/login">Sign in with Instagram</a>
+                </Button>
+              </div>
+
+ 
               <div className="space-y-3">
                 <div className="flex items-start">
-                  <Checkbox 
-                    id="agreedToTerms" 
+                  <Checkbox
+                    id="agreedToTerms"
                     checked={userData.agreedToTerms}
-                    onCheckedChange={(checked) => handleCheckboxChange('agreedToTerms', checked as boolean)} 
+                    onCheckedChange={(checked) => handleCheckboxChange('agreedToTerms', checked as boolean)}
                     className="mr-2 mt-1"
                   />
                   <Label htmlFor="agreedToTerms" className="text-sm">
@@ -237,12 +273,12 @@ const SignUp = () => {
                     </Link>
                   </Label>
                 </div>
-                
+
                 <div className="flex items-start">
-                  <Checkbox 
-                    id="agreedToAge" 
+                  <Checkbox
+                    id="agreedToAge"
                     checked={userData.agreedToAge}
-                    onCheckedChange={(checked) => handleCheckboxChange('agreedToAge', checked as boolean)} 
+                    onCheckedChange={(checked) => handleCheckboxChange('agreedToAge', checked as boolean)}
                     className="mr-2 mt-1"
                   />
                   <Label htmlFor="agreedToAge" className="text-sm">
@@ -250,15 +286,15 @@ const SignUp = () => {
                   </Label>
                 </div>
               </div>
-              
-              <Button 
-                type="submit" 
+
+              <Button
+                type="submit"
                 className="w-full py-6 bg-accent hover:bg-accent/90 text-primary font-semibold text-lg"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Creating Account..." : "Create Account"}
               </Button>
-              
+
               <div className="text-center mt-6">
                 <p className="text-muted">
                   Already have an account? {' '}

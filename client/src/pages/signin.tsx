@@ -13,7 +13,7 @@ import { toast } from '@/hooks/use-toast';
 const SignIn = () => {
   const [, setLocation] = useLocation();
   const [credentials, setCredentials] = useState({
-    username: '',
+    name: '',
     password: '',
     rememberMe: false
   });
@@ -32,10 +32,10 @@ const SignIn = () => {
     e.preventDefault();
     
     // Validate form
-    if (!credentials.username || !credentials.password) {
+    if (!credentials.name || !credentials.password) {
       toast({
         title: "Error",
-        description: "Please enter both username and password",
+        description: "Please enter both name and password",
         variant: "destructive"
       });
       return;
@@ -51,7 +51,7 @@ const SignIn = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          username: credentials.username,
+          name: credentials.name,
           password: credentials.password
         }),
         credentials: 'include'
@@ -80,7 +80,7 @@ const SignIn = () => {
     } catch (error) {
       toast({
         title: "Sign in failed",
-        description: error instanceof Error ? error.message : "Invalid username or password",
+        description: error instanceof Error ? error.message : "Invalid name or password",
         variant: "destructive"
       });
     } finally {
@@ -115,17 +115,17 @@ const SignIn = () => {
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="name">name</Label>
                 <div className="relative mt-1">
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <FaEnvelope className="text-muted-foreground" />
                   </div>
                   <Input 
-                    id="username"
-                    name="username"
-                    value={credentials.username}
+                    id="name"
+                    name="name"
+                    value={credentials.name}
                     onChange={handleChange}
-                    placeholder="Enter your username"
+                    placeholder="Enter your name"
                     className="pl-10 bg-secondary bg-opacity-30 border-primary"
                   />
                 </div>

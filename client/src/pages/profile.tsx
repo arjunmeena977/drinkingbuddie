@@ -18,7 +18,7 @@ import { toast } from '@/hooks/use-toast';
 
 interface User {
   id?: number;
-  username: string;
+  name: string;
   email?: string;
   fullName?: string | null;
   age?: number | null;
@@ -157,16 +157,16 @@ const Profile = () => {
                   <CardHeader className="flex flex-col items-center space-y-4 pb-0">
                     <Avatar className="w-24 h-24 border-2 border-accent">
                       {user.profileImage ? (
-                        <AvatarImage src={user.profileImage} alt={user.username} />
+                        <AvatarImage src={user.profileImage} alt={user.name} />
                       ) : (
                         <AvatarFallback className="bg-primary text-white text-xl">
-                          {user.username?.charAt(0).toUpperCase()}
+                          {user.name?.charAt(0).toUpperCase()}
                         </AvatarFallback>
                       )}
                     </Avatar>
                     <div className="text-center">
-                      <h2 className="text-2xl font-bold text-white">{user.fullName || user.username}</h2>
-                      <p className="text-accent">@{user.username}</p>
+                      <h2 className="text-2xl font-bold text-white">{user.fullName || user.name}</h2>
+                      <p className="text-accent">@{user.name}</p>
                     </div>
                   </CardHeader>
                   <CardContent className="pt-6">

@@ -17,7 +17,7 @@ import { toast } from '@/hooks/use-toast';
 // Partner interface to make the filtering easier
 interface Partner {
   id: number;
-  username?: string;
+  name?: string;
   profileImage?: string | null;
   fullName?: string | null;
   age?: number | null;
