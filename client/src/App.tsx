@@ -17,6 +17,7 @@ import EventDetails from "@/pages/event-details";
 import Profile from "@/pages/profile";
 import Favorites from "@/pages/favorites";
 import NotFound from "@/pages/not-found";
+import VerifyOtp from "@/pages/VerifyOtp";
 
 // Layout
 import Navbar from "@/components/layout/navbar";
@@ -42,6 +43,7 @@ function App() {
           <Route path="/signup" component={SignUp} />
           <Route path="/profile" component={Profile} />
           <Route path="/favorites" component={Favorites} />
+          <Route path="/verify-otp" component={VerifyOtp} />
           <Route component={NotFound} />
         </Switch>
       </main>

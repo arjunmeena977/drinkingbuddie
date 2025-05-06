@@ -36,6 +36,8 @@ const SignUp = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
 
     // Validate form
     if (!userData.name || !userData.email || !userData.password || !userData.confirmPassword) {
@@ -46,6 +48,16 @@ const SignUp = () => {
       });
       return;
     }
+
+    if (!userData.email && !userData.mobile) {
+      toast({
+        title: "Error",
+        description: "Please provide either an email or mobile number",
+        variant: "destructive"
+      });
+      return;
+    }
+    
 
     if (userData.password !== userData.confirmPassword) {
       toast({
@@ -65,43 +77,44 @@ const SignUp = () => {
       return;
     }
 
-    setIsSubmitting(true);
 
     try {
-      // Submit registration request
-      const response = await fetch('/api/auth/register', {
+      const formData = new FormData();
+      formData.append('name', userData.name);
+      formData.append('password', userData.password);
+      if (userData.email) formData.append('email', userData.email);
+      if (userData.mobile) formData.append('mobile', userData.mobile);
+      // If you are using picture upload later, add it here
+      // if (userData.picture) formData.append('picture', userData.picture);
+  
+      const response = await fetch('http://localhost:8000/auth/signup', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: userData.name,
-          email: userData.email,
-          mobile: userData.mobile,
-          password: userData.password
-        })
+        body: formData
       });
-
+  
+      console.log("response", response);
+  
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Registration failed');
+        throw new Error(error.detail || 'Failed to send OTP');
       }
-
-      // Success
+  
+      const { session_id } = await response.json();
+  
       toast({
-        title: "Account created successfully!",
-        description: "You can now sign in with your credentials"
+        title: "OTP Sent!",
+        description: "Please verify the OTP to complete your registration"
       });
-
-      // Redirect to sign in page
-      setLocation('/signin');
-
+  
+      setLocation(`/verify-otp?session=${session_id}`);
+  
     } catch (error) {
       toast({
         title: "Registration failed",
         description: error instanceof Error ? error.message : "Unable to create account. Please try again.",
         variant: "destructive"
       });
+      console.log("error", error);
     } finally {
       setIsSubmitting(false);
     }
